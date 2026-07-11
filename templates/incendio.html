@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Incendio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <h1>🔥 Incendio</h1>
+    <div class="sub">Edificio, contenido y riesgos adicionales</div>
+    <div class="nav-ramas">
+      <a href="/">Seguro de auto</a>
+      <a href="/caucion">Caución comercio</a>
+      <a href="/incendio" class="activo">Incendio</a>
+      <a href="/naval">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <form class="card" action="/cotizar-incendio" method="POST">
+      <span class="km-label">BIENES A ASEGURAR</span>
+
+      <label for="valor_edificio">Valor del edificio (ARS)</label>
+      <input type="number" id="valor_edificio" name="valor_edificio" min="0" step="1000" placeholder="ej: 80000000" value="0">
+
+      <label for="valor_contenido">Valor del contenido (mercadería, maquinaria, mobiliario) (ARS)</label>
+      <input type="number" id="valor_contenido" name="valor_contenido" min="0" step="1000" placeholder="ej: 20000000" value="0">
+      <div class="hint">Completá al menos uno de los dos valores.</div>
+
+      <label for="tipo_riesgo">Tipo de riesgo</label>
+      <select id="tipo_riesgo" name="tipo_riesgo" required>
+        {% for id, t in tipos_riesgo.items() %}
+          <option value="{{ id }}">{{ t.nombre }}</option>
+        {% endfor %}
+      </select>
+
+      <span class="km-label" style="margin-top:24px;">RIESGOS ADICIONALES (OPCIONAL)</span>
+      <div style="margin-top:10px;">
+        {% for id, a in adicionales.items() %}
+        <label style="display:flex; align-items:flex-start; gap:8px; font-weight:500; margin:10px 0;">
+          <input type="checkbox" name="adicionales" value="{{ id }}" style="width:auto; margin-top:3px;">
+          <span>{{ a.nombre }}<br><span class="hint" style="margin:0;">{{ a.nota }}</span></span>
+        </label>
+        {% endfor %}
+      </div>
+
+      <button class="cta" type="submit">Ver cotización →</button>
+    </form>
+  </div>
+</body>
+</html>

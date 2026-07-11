@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Robo y Riesgos similares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .categoria-tabs { display:flex; gap:8px; margin-bottom:6px; flex-wrap:wrap; }
+    .categoria-tabs button {
+      flex:1 1 30%; min-width:140px; padding:10px; border-radius:8px; border:1.5px solid var(--border);
+      background:var(--paper); font-family:'Space Grotesk',sans-serif; font-weight:700;
+      font-size:0.8rem; cursor:pointer; color:var(--text-muted);
+    }
+    .categoria-tabs button.activo { background:var(--navy); color:#fff; border-color:var(--navy); }
+    .seccion { display:none; }
+    .seccion.visible { display:block; }
+    .checkbox-row { display:flex; align-items:center; gap:8px; font-weight:500; margin:8px 0; }
+    .checkbox-row input { width:auto; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>🥷 Robo y Riesgos similares</h1>
+    <div class="sub">Actividades, vivienda, valores, alhajas e infidelidad de empleados</div>
+    <div class="nav-ramas">
+      <a href="/">Seguro de auto</a>
+      <a href="/caucion">Caución comercio</a>
+      <a href="/incendio">Incendio</a>
+      <a href="/naval">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo" class="activo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <form class="card" action="/cotizar-robo" method="POST" id="form-robo">
+      <span class="km-label">ELEGÍ LA COBERTURA</span>
+      <div class="categoria-tabs">
+        <button type="button" class="tab-btn activo" data-cat="actividades">Actividades comerciales</button>
+        <button type="button" class="tab-btn" data-cat="vivienda">Vivienda particular</button>
+        <button type="button" class="tab-btn" data-cat="valores_caja">Valores en caja fuerte</button>
+        <button type="button" class="tab-btn" data-cat="valores_transito">Valores en tránsito</button>
+        <button type="button" class="tab-btn" data-cat="alhajas">Alhajas y objetos diversos</button>
+        <button type="button" class="tab-btn" data-cat="infidelidad">Infidelidad de empleados</button>
+      </div>
+      <input type="hidden" name="categoria" id="categoria" value="actividades">
+
+      <!-- ACTIVIDADES COMERCIALES, INDUSTRIALES Y CIVILES -->
+      <div class="seccion visible" data-seccion="actividades">
+        <label for="contenido_actividades">Contenido general asegurado (ARS)</label>
+        <input type="number" id="contenido_actividades" name="contenido_actividades" min="0" step="1000" placeholder="ej: 30000000">
+        <div class="hint">Mercaderías, maquinaria, instalaciones, muebles y útiles del local. Los daños ocasionados por los ladrones para cometer el delito se cubren hasta un 15% de la suma asegurada.</div>
+      </div>
+
+      <!-- VIVIENDA PARTICULAR -->
+      <div class="seccion" data-seccion="vivienda">
+        <label for="contenido_vivienda">Contenido general asegurado (ARS)</label>
+        <input type="number" id="contenido_vivienda" name="contenido_vivienda" min="0" step="1000" placeholder="ej: 15000000">
+        <label class="checkbox-row"><input type="checkbox" name="cubre_huespedes"> Incluir bienes de huéspedes (hasta 10% de la suma asegurada)</label>
+        <div class="hint">Cubre ROBO, HURTO y su tentativa. No cubre si la vivienda estuvo deshabitada más de 45 días consecutivos (o 120 en total).</div>
+      </div>
+
+      <!-- VALORES EN CAJA FUERTE Y EN LOCALES -->
+      <div class="seccion" data-seccion="valores_caja">
+        <label for="valor_caja">Valor a proteger — dinero, cheques al portador, etc. (ARS)</label>
+        <input type="number" id="valor_caja" name="valor_caja" min="0" step="1000" placeholder="ej: 5000000">
+        <label class="checkbox-row"><input type="checkbox" name="en_caja_fuerte" checked> Los valores están depositados en una caja fuerte (extiende la cobertura fuera de horario habitual)</label>
+      </div>
+
+      <!-- VALORES EN TRÁNSITO -->
+      <div class="seccion" data-seccion="valores_transito">
+        <label for="valor_transito">Valor transportado (ARS)</label>
+        <input type="number" id="valor_transito" name="valor_transito" min="0" step="1000" placeholder="ej: 8000000">
+        <label for="recorrido_km">Recorrido habitual (km)</label>
+        <input type="number" id="recorrido_km" name="recorrido_km" min="0" step="1" placeholder="ej: 40" value="0">
+        <div class="hint">Solo se cubre el itinerario usual y razonablemente directo. Recorridos de más de 100 km permiten detenciones adicionales.</div>
+      </div>
+
+      <!-- JOYAS, ALHAJAS, PIELES Y OBJETOS DIVERSOS -->
+      <div class="seccion" data-seccion="alhajas">
+        <label for="cobertura_alhajas">Cobertura</label>
+        <select id="cobertura_alhajas" name="cobertura_alhajas">
+          {% for id, c in coberturas_alhajas.items() %}
+            <option value="{{ id }}">{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+        <label for="valor_alhajas">Valor de los bienes (ARS)</label>
+        <input type="number" id="valor_alhajas" name="valor_alhajas" min="0" step="1000" placeholder="ej: 4000000">
+      </div>
+
+      <!-- INFIDELIDAD DE EMPLEADOS -->
+      <div class="seccion" data-seccion="infidelidad">
+        <label for="categoria_infidelidad">Categoría del personal</label>
+        <select id="categoria_infidelidad" name="categoria_infidelidad">
+          {% for id, c in categorias_infidelidad.items() %}
+            <option value="{{ id }}">{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+        <label for="suma_por_empleado">Suma asegurada por empleado (ARS)</label>
+        <input type="number" id="suma_por_empleado" name="suma_por_empleado" min="0" step="1000" placeholder="ej: 2000000">
+        <label for="cantidad_empleados">Cantidad de empleados a cubrir</label>
+        <input type="number" id="cantidad_empleados" name="cantidad_empleados" min="1" step="1" placeholder="ej: 10">
+        <div class="hint">Si supera los 25 empleados, la póliza permite cobertura en forma innominada.</div>
+      </div>
+
+      <button class="cta" type="submit">Ver cotización →</button>
+    </form>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab-btn');
+    const secciones = document.querySelectorAll('.seccion');
+    const categoriaInput = document.getElementById('categoria');
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(b => b.classList.remove('activo'));
+        btn.classList.add('activo');
+        const cat = btn.dataset.cat;
+        categoriaInput.value = cat;
+        secciones.forEach(s => s.classList.toggle('visible', s.dataset.seccion === cat));
+      });
+    });
+  </script>
+</body>
+</html>

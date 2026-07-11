@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cotizador de Seguros de Auto</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <h1>🚗 Cotizador de Seguros de Auto</h1>
+    <div class="sub">Comparación instantánea entre ramas de cobertura</div>
+    <div class="nav-ramas">
+      <a href="/" class="activo">Seguro de auto</a>
+      <a href="/caucion">Caución comercio</a>
+      <a href="/incendio">Incendio</a>
+      <a href="/naval">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <form class="card" action="/cotizar" method="POST">
+      <span class="km-label">DATOS DEL VEHÍCULO</span>
+
+      <label for="valor_vehiculo">Valor del vehículo (ARS)</label>
+      <input type="number" id="valor_vehiculo" name="valor_vehiculo" min="0" step="1000" placeholder="ej: 15000000" required>
+
+      <label for="anio_vehiculo">Año del vehículo</label>
+      <input type="number" id="anio_vehiculo" name="anio_vehiculo" min="1980" max="2026" placeholder="ej: 2021" required>
+
+      <label for="uso">Uso del vehículo</label>
+      <select id="uso" name="uso" required>
+        {% for id, u in usos.items() %}
+          <option value="{{ id }}">{{ u.nombre }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="zona">Zona de circulación</label>
+      <select id="zona" name="zona" required>
+        {% for id, z in zonas.items() %}
+          <option value="{{ id }}">{{ z.nombre }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="franquicia">Franquicia (solo aplica a Todo Riesgo)</label>
+      <select id="franquicia" name="franquicia">
+        {% for id, f in franquicias.items() %}
+          <option value="{{ id }}">{{ f.nombre }}</option>
+        {% endfor %}
+      </select>
+      <div class="hint">Mayor franquicia = prima más baja, pero pagás más en caso de siniestro.</div>
+
+      <button class="cta" type="submit">Ver cotización →</button>
+    </form>
+  </div>
+</body>
+</html>

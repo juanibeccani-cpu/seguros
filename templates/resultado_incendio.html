@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tu cotización de Incendio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <h1>🔥 Tu cotización de Incendio</h1>
+    <div class="sub">{{ r.tipo_riesgo }}</div>
+    <div class="nav-ramas">
+      <a href="/">Seguro de auto</a>
+      <a href="/caucion">Caución comercio</a>
+      <a href="/incendio" class="activo">Incendio</a>
+      <a href="/naval">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="vehiculo-resumen">
+      <div>Edificio: <b>${{ "{:,.0f}".format(r.valor_edificio) }}</b></div>
+      <div>Contenido: <b>${{ "{:,.0f}".format(r.valor_contenido) }}</b></div>
+    </div>
+
+    <div class="rama-card">
+      <div class="nombre">Cobertura básica + adicionales</div>
+      <div class="odometro">
+        ${{ "{:,.0f}".format(r.prima_anual) }}
+        <span class="periodo">/ año — ${{ "{:,.0f}".format(r.prima_mensual) }} / mes</span>
+      </div>
+      <div class="desglose">
+        <div><span>Prima básica edificio</span><span>${{ "{:,.0f}".format(r.prima_edificio_base) }}</span></div>
+        <div><span>Prima básica contenido</span><span>${{ "{:,.0f}".format(r.prima_contenido_base) }}</span></div>
+        {% for a in r.adicionales %}
+        <div><span>{{ a.nombre }}</span><span>${{ "{:,.0f}".format(a.prima) }}</span></div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <a class="volver" href="/incendio">← Volver a cotizar</a>
+  </div>
+</body>
+</html>

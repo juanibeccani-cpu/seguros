@@ -1,0 +1,212 @@
+/* ---------------------------------------------------------------
+   Paleta: "ruta al atardecer" — azul noche + verde semáforo (aprobado)
+   + ámbar (precaución/franquicia). Números en monoespaciada tipo
+   odómetro de tablero.
+------------------------------------------------------------------ */
+:root {
+  --navy: #10243E;
+  --navy-light: #17324F;
+  --paper: #EEF2F1;
+  --card: #FFFFFF;
+  --teal: #2FBF8F;
+  --amber: #FFB238;
+  --text: #10243E;
+  --text-muted: #5B6B7C;
+  --text-light: #F5F7FA;
+  --border: #DCE3E0;
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.5;
+}
+
+.topbar {
+  background: var(--navy);
+  color: var(--text-light);
+  padding: 22px 32px;
+  border-bottom: 4px dashed var(--amber);
+}
+
+.topbar h1 {
+  margin: 0;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.topbar .sub {
+  color: #9FB3C8;
+  font-size: 0.9rem;
+  margin-top: 4px;
+}
+
+.wrap {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 36px 24px 64px;
+}
+
+.nav-ramas {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.nav-ramas a {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  letter-spacing: 0.04em;
+  color: #9FB3C8;
+  text-decoration: none;
+  padding: 6px 12px;
+  border: 1px solid rgba(159, 179, 200, 0.35);
+  border-radius: 999px;
+  transition: all 0.15s ease;
+}
+
+.nav-ramas a:hover,
+.nav-ramas a.activo {
+  color: var(--navy);
+  background: var(--teal);
+  border-color: var(--teal);
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px 28px 8px;
+  margin-bottom: 24px;
+}
+
+.km-label {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--teal);
+  background: rgba(47, 191, 143, 0.1);
+  border: 1px solid rgba(47, 191, 143, 0.35);
+  border-radius: 999px;
+  padding: 3px 10px;
+  margin-bottom: 10px;
+}
+
+label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 600;
+  margin: 18px 0 6px;
+  color: var(--text);
+}
+
+input, select {
+  width: 100%;
+  padding: 11px 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-family: inherit;
+  background: var(--paper);
+  color: var(--text);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(47, 191, 143, 0.18);
+}
+
+.hint {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+button.cta {
+  width: 100%;
+  margin: 28px 0 24px;
+  background: var(--navy);
+  color: var(--text-light);
+  border: none;
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  font-family: 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+button.cta:hover { background: #0B1A2E; }
+
+/* -------- Resultado -------- */
+
+.vehiculo-resumen {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+}
+
+.vehiculo-resumen b { color: var(--text); }
+
+.rama-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 5px solid var(--teal);
+  border-radius: var(--radius);
+  padding: 22px 24px;
+  margin-bottom: 18px;
+}
+
+.rama-card .nombre {
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.odometro {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 8px 0 2px;
+}
+
+.odometro .periodo {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+}
+
+.desglose {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  border-top: 1px dashed var(--border);
+  padding-top: 10px;
+}
+
+.desglose div { display: flex; justify-content: space-between; padding: 2px 0; }
+
+a.volver {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--navy);
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+a.volver:hover { text-decoration: underline; }

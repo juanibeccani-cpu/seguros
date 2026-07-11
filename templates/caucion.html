@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Cauciones Comercio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <h1>📄 Caución Comercio</h1>
+    <div class="sub">Garantías comerciales, judiciales y aduaneras</div>
+    <div class="nav-ramas">
+      <a href="/">Seguro de auto</a>
+      <a href="/caucion" class="activo">Caución comercio</a>
+      <a href="/incendio">Incendio</a>
+      <a href="/naval">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <form class="card" action="/cotizar-caucion" method="POST">
+      <span class="km-label">DATOS DE LA CAUCIÓN</span>
+
+      <label for="tipo_caucion">Tipo de caución</label>
+      <select id="tipo_caucion" name="tipo_caucion" required>
+        {% for id, t in tipos.items() %}
+          <option value="{{ id }}">{{ t.nombre }}</option>
+        {% endfor %}
+      </select>
+
+      <label for="monto_garantizado">Monto a garantizar (ARS)</label>
+      <input type="number" id="monto_garantizado" name="monto_garantizado" min="1" step="1000" placeholder="ej: 5000000" required>
+
+      <label for="plazo_meses">Plazo de la garantía (meses)</label>
+      <input type="number" id="plazo_meses" name="plazo_meses" min="1" max="60" placeholder="ej: 12" required>
+      <div class="hint">La prima se prorratea según los meses de vigencia solicitados.</div>
+
+      <button class="cta" type="submit">Ver cotización →</button>
+    </form>
+  </div>
+</body>
+</html>

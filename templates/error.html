@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>No pudimos cotizar</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <h1>⚠️ No pudimos generar la cotización</h1>
+    <div class="sub">Revisá los datos ingresados</div>
+    <div class="nav-ramas">
+      <a href="/">Seguro de auto</a>
+      <a href="/caucion">Caución comercio</a>
+      <a href="/incendio">Incendio</a>
+      <a href="/naval">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="card" style="padding-bottom:24px;">
+      <span class="km-label" style="background:rgba(255,178,56,0.15); border-color:rgba(255,178,56,0.4); color:#B8860B;">MOTIVO</span>
+      <p style="font-size:1rem; margin-top:14px;">{{ mensaje }}</p>
+      <a class="volver" href="{{ volver_url }}">← Volver al formulario</a>
+    </div>
+  </div>
+</body>
+</html>

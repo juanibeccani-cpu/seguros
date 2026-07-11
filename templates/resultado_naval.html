@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tu cotización</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <h1>⚓ Tu cotización — {{ categoria }}</h1>
+    <div class="sub">{{ r.cobertura }}</div>
+    <div class="nav-ramas">
+      <a href="/">Seguro de auto</a>
+      <a href="/caucion">Caución comercio</a>
+      <a href="/incendio">Incendio</a>
+      <a href="/naval" class="activo">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="vehiculo-resumen">
+      {% if tipo == "buque" %}
+        <div>Valor del buque: <b>${{ "{:,.0f}".format(r.valor_buque) }}</b></div>
+      {% elif tipo == "placer" %}
+        <div>Valor: <b>${{ "{:,.0f}".format(r.valor_embarcacion) }}</b></div>
+        <div>Antigüedad: <b>{{ r.antiguedad }} años</b></div>
+      {% elif tipo == "aeronave" %}
+        <div>Valor: <b>${{ "{:,.0f}".format(r.valor_aeronave) }}</b></div>
+        <div>Peso máx. despegue: <b>{{ r.peso_kg }} kg</b></div>
+      {% endif %}
+    </div>
+
+    <div class="rama-card">
+      <div class="nombre">{{ r.cobertura }}</div>
+      {% if r.descripcion %}<div class="hint" style="margin:6px 0 0;">{{ r.descripcion }}</div>{% endif %}
+      <div class="odometro">
+        ${{ "{:,.0f}".format(r.prima_anual) }}
+        <span class="periodo">/ año — ${{ "{:,.0f}".format(r.prima_mensual) }} / mes</span>
+      </div>
+      <div class="desglose">
+        {% if tipo == "buque" %}
+          <div><span>Prima base</span><span>${{ "{:,.0f}".format(r.prima_base) }}</span></div>
+          {% if r.adicional_colision %}
+          <div><span>Ampliación RC colisión (1/4 remanente)</span><span>${{ "{:,.0f}".format(r.adicional_colision) }}</span></div>
+          {% endif %}
+        {% elif tipo == "placer" %}
+          <div><span>Prima base</span><span>${{ "{:,.0f}".format(r.prima_base) }}</span></div>
+          {% for a in r.adicionales %}
+          <div><span>{{ a.nombre }}</span><span>${{ "{:,.0f}".format(a.prima) }}</span></div>
+          {% endfor %}
+        {% elif tipo == "aeronave" %}
+          <div><span>Daños a la aeronave</span><span>${{ "{:,.0f}".format(r.prima_danos) }}</span></div>
+          {% if r.incluye_rc %}
+          <div><span>RC terceros no transportados ({{ r.franja_rc }})</span><span>${{ "{:,.0f}".format(r.prima_rc) }}</span></div>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+
+    <a class="volver" href="/naval">← Volver a cotizar</a>
+  </div>
+</body>
+</html>

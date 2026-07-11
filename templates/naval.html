@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Casco / Náutica / Aéreo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    .categoria-tabs { display:flex; gap:8px; margin-bottom:6px; }
+    .categoria-tabs button {
+      flex:1; padding:10px; border-radius:8px; border:1.5px solid var(--border);
+      background:var(--paper); font-family:'Space Grotesk',sans-serif; font-weight:700;
+      font-size:0.85rem; cursor:pointer; color:var(--text-muted);
+    }
+    .categoria-tabs button.activo { background:var(--navy); color:#fff; border-color:var(--navy); }
+    .seccion { display:none; }
+    .seccion.visible { display:block; }
+    .checkbox-row { display:flex; align-items:center; gap:8px; font-weight:500; margin:8px 0; }
+    .checkbox-row input { width:auto; }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <h1>⚓ Casco · Náutica · Aeronavegación</h1>
+    <div class="sub">Buques, embarcaciones de placer y aeronaves</div>
+    <div class="nav-ramas">
+      <a href="/">Seguro de auto</a>
+      <a href="/caucion">Caución comercio</a>
+      <a href="/incendio">Incendio</a>
+      <a href="/naval" class="activo">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <form class="card" action="/cotizar-naval" method="POST" id="form-naval">
+      <span class="km-label">ELEGÍ LA CATEGORÍA</span>
+      <div class="categoria-tabs">
+        <button type="button" class="tab-btn activo" data-cat="buque">Buque comercial</button>
+        <button type="button" class="tab-btn" data-cat="placer">Embarcación de placer</button>
+        <button type="button" class="tab-btn" data-cat="aeronave">Aeronave</button>
+      </div>
+      <input type="hidden" name="categoria" id="categoria" value="buque">
+
+      <!-- BUQUE COMERCIAL -->
+      <div class="seccion visible" data-seccion="buque">
+        <label for="cobertura_buque">Fórmula de cobertura</label>
+        <select id="cobertura_buque" name="cobertura_buque">
+          {% for id, c in coberturas_buque.items() %}
+            <option value="{{ id }}">{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+
+        <label for="valor_buque">Valor asegurable del buque (ARS)</label>
+        <input type="number" id="valor_buque" name="valor_buque" min="0" step="1000" placeholder="ej: 500000000">
+
+        <label class="checkbox-row"><input type="checkbox" name="adicional_colision"> Ampliar RC por colisión al 1/4 remanente</label>
+      </div>
+
+      <!-- EMBARCACIÓN DE PLACER -->
+      <div class="seccion" data-seccion="placer">
+        <label for="cobertura_placer">Fórmula de cobertura</label>
+        <select id="cobertura_placer" name="cobertura_placer">
+          {% for id, c in coberturas_placer.items() %}
+            <option value="{{ id }}">{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+
+        <label for="valor_placer">Valor de la embarcación (ARS)</label>
+        <input type="number" id="valor_placer" name="valor_placer" min="0" step="1000" placeholder="ej: 15000000">
+
+        <label for="anio_placer">Año de construcción</label>
+        <input type="number" id="anio_placer" name="anio_placer" min="1970" max="2026" placeholder="ej: 2015">
+        <div class="hint">No se pueden asegurar cascos con más de 15 años de antigüedad.</div>
+
+        <span class="km-label" style="margin-top:16px;">ADICIONALES OPTATIVOS</span>
+        <div style="margin-top:8px;">
+          {% for id, a in adicionales_placer.items() %}
+          <label class="checkbox-row"><input type="checkbox" name="adicionales_placer" value="{{ id }}"> {{ a.nombre }}</label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- AERONAVE -->
+      <div class="seccion" data-seccion="aeronave">
+        <label for="cobertura_aeronave">Cobertura de daños a la aeronave</label>
+        <select id="cobertura_aeronave" name="cobertura_aeronave">
+          {% for id, c in coberturas_aeronave.items() %}
+            <option value="{{ id }}">{{ c.nombre }}</option>
+          {% endfor %}
+        </select>
+
+        <label for="valor_aeronave">Valor de la aeronave (ARS)</label>
+        <input type="number" id="valor_aeronave" name="valor_aeronave" min="0" step="1000" placeholder="ej: 300000000">
+
+        <label for="peso_aeronave">Peso máximo de despegue (kg)</label>
+        <input type="number" id="peso_aeronave" name="peso_aeronave" min="0" step="10" placeholder="ej: 1200">
+
+        <label class="checkbox-row"><input type="checkbox" name="incluir_rc" checked> Incluir RC obligatoria a terceros no transportados</label>
+      </div>
+
+      <button class="cta" type="submit">Ver cotización →</button>
+    </form>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab-btn');
+    const secciones = document.querySelectorAll('.seccion');
+    const categoriaInput = document.getElementById('categoria');
+
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tabs.forEach(b => b.classList.remove('activo'));
+        btn.classList.add('activo');
+        const cat = btn.dataset.cat;
+        categoriaInput.value = cat;
+        secciones.forEach(s => s.classList.toggle('visible', s.dataset.seccion === cat));
+      });
+    });
+  </script>
+</body>
+</html>

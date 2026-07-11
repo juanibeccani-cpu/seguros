@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tu cotización de Robo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <h1>🥷 Tu cotización — {{ categoria }}</h1>
+    <div class="sub">{{ r.cobertura }} · {{ r.medida_prestacion }}</div>
+    <div class="nav-ramas">
+      <a href="/">Seguro de auto</a>
+      <a href="/caucion">Caución comercio</a>
+      <a href="/incendio">Incendio</a>
+      <a href="/naval">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo" class="activo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="vehiculo-resumen">
+      {% if tipo == "actividades" %}
+        <div>Contenido asegurado: <b>${{ "{:,.0f}".format(r.contenido_asegurado) }}</b></div>
+      {% elif tipo == "vivienda" %}
+        <div>Contenido asegurado: <b>${{ "{:,.0f}".format(r.contenido_asegurado) }}</b></div>
+        <div>Huéspedes: <b>{{ "Sí" if r.cubre_huespedes else "No" }}</b></div>
+      {% elif tipo == "valores_caja" %}
+        <div>Valor protegido: <b>${{ "{:,.0f}".format(r.valor_a_proteger) }}</b></div>
+        <div>Caja fuerte: <b>{{ "Sí" if r.en_caja_fuerte else "No" }}</b></div>
+      {% elif tipo == "valores_transito" %}
+        <div>Valor transportado: <b>${{ "{:,.0f}".format(r.valor_transportado) }}</b></div>
+        <div>Recorrido: <b>{{ r.recorrido_km | round(0) }} km</b></div>
+      {% elif tipo == "alhajas" %}
+        <div>Valor de los bienes: <b>${{ "{:,.0f}".format(r.valor_bienes) }}</b></div>
+      {% elif tipo == "infidelidad" %}
+        <div>Categoría: <b>{{ r.categoria }}</b></div>
+        <div>Empleados cubiertos: <b>{{ r.cantidad_empleados }}</b> ({{ r.modalidad }})</div>
+      {% endif %}
+    </div>
+
+    <div class="rama-card">
+      <div class="nombre">{{ r.cobertura }}</div>
+      {% if r.nota %}<div class="hint" style="margin:6px 0 0;">{{ r.nota }}</div>{% endif %}
+      <div class="odometro">
+        ${{ "{:,.0f}".format(r.prima_anual) }}
+        <span class="periodo">/ año — ${{ "{:,.0f}".format(r.prima_mensual) }} / mes</span>
+      </div>
+      <div class="desglose">
+        {% if tipo == "actividades" %}
+          <div><span>Prima base</span><span>${{ "{:,.0f}".format(r.prima_base) }}</span></div>
+          <div><span>Tope daños al local (15%)</span><span>${{ "{:,.0f}".format(r.tope_danos_al_local) }}</span></div>
+        {% elif tipo == "vivienda" %}
+          <div><span>Prima base</span><span>${{ "{:,.0f}".format(r.prima_base) }}</span></div>
+          {% if r.cubre_huespedes %}
+          <div><span>Bienes de huéspedes</span><span>${{ "{:,.0f}".format(r.prima_huespedes) }}</span></div>
+          {% endif %}
+          <div><span>Tope daños a la vivienda (15%)</span><span>${{ "{:,.0f}".format(r.tope_danos_a_la_vivienda) }}</span></div>
+        {% elif tipo == "valores_caja" %}
+          <div><span>Prima anual</span><span>${{ "{:,.0f}".format(r.prima_anual) }}</span></div>
+        {% elif tipo == "valores_transito" %}
+          <div><span>Prima base</span><span>${{ "{:,.0f}".format(r.prima_base) }}</span></div>
+          {% if r.recargo_km_extra > 0 %}
+          <div><span>Recargo por km adicionales</span><span>${{ "{:,.0f}".format(r.recargo_km_extra) }}</span></div>
+          {% endif %}
+        {% elif tipo == "alhajas" %}
+          <div><span>Prima anual</span><span>${{ "{:,.0f}".format(r.prima_anual) }}</span></div>
+        {% elif tipo == "infidelidad" %}
+          <div><span>Suma asegurada por empleado</span><span>${{ "{:,.0f}".format(r.suma_asegurada_por_empleado) }}</span></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <a class="volver" href="/robo">← Volver a cotizar</a>
+  </div>
+</body>
+</html>

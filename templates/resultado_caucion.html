@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Tu cotización de caución</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="topbar">
+    <h1>📄 Tu cotización de caución</h1>
+    <div class="sub">{{ r.tipo }}</div>
+    <div class="nav-ramas">
+      <a href="/">Seguro de auto</a>
+      <a href="/caucion" class="activo">Caución comercio</a>
+      <a href="/incendio">Incendio</a>
+      <a href="/naval">Casco / Náutica / Aéreo</a>
+      <a href="/rc">RC</a>
+      <a href="/robo">Robo</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="vehiculo-resumen">
+      <div>Monto garantizado: <b>${{ "{:,.0f}".format(r.monto_garantizado) }}</b></div>
+      <div>Plazo: <b>{{ r.plazo_meses }} meses</b></div>
+      <div>Tasa anual: <b>{{ (r.tasa_anual * 100) | round(1) }}%</b></div>
+    </div>
+
+    <div class="rama-card">
+      <div class="nombre">{{ r.tipo }}</div>
+      <div class="odometro">
+        ${{ "{:,.0f}".format(r.prima_final) }}
+        <span class="periodo">prima total por {{ r.plazo_meses }} meses</span>
+      </div>
+      <div class="desglose">
+        <div><span>Prima prorrateada</span><span>${{ "{:,.0f}".format(r.prima_prorrateada) }}</span></div>
+        {% if r.prima_minima_aplicada %}
+        <div><span>Prima mínima aplicada</span><span>Sí</span></div>
+        {% endif %}
+      </div>
+    </div>
+
+    <a class="volver" href="/caucion">← Volver a cotizar</a>
+  </div>
+</body>
+</html>
