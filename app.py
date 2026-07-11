@@ -11,6 +11,8 @@ Para correrlo:
 Después abrí en el navegador: http://127.0.0.1:5000
 """
 
+import os
+
 from flask import Flask, render_template, request
 from calculadora import (
     cotizar_todas_las_ramas,
@@ -37,7 +39,8 @@ from calculadora_robo import (
     calcular_infidelidad_empleados, CATEGORIAS_INFIDELIDAD,
 )
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(__name__, static_folder=os.path.join(BASE_DIR, "public", "static"))
 
 
 @app.errorhandler(ValueError)
